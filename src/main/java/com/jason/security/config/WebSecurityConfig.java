@@ -2,6 +2,8 @@ package com.jason.security.config;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
@@ -23,6 +25,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter{
     @Autowired
     private PasswordEncoder passwordEncoder;
 
+    @Autowired
+    private UserDetailsService userDetailsService;
+
     /**
      * 授权
      */
@@ -31,10 +36,24 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter{
         // 授权
         http.csrf().disable()
                 .formLogin()
+                .loginPage("/login")
+                .successForwardUrl("/index")
+//                .loginProcessingUrl("/login")
+                // 登录请求以及静态资源放行
+                .and().authorizeRequests().antMatchers("/loginPage","/css/**","/images/**","/js/**","/login").permitAll()
                 .and()
                 .authorizeRequests().antMatchers("/**").authenticated()
-                .and().
-                authorizeRequests().anyRequest().permitAll();
+                .and()
+                .authorizeRequests().anyRequest().permitAll();
+        http.rememberMe();
+    }
+
+    /**
+     * 认证
+     */
+    @Override
+    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+        auth.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder);
     }
 
     /**
@@ -47,7 +66,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter{
         return memory;
     }
 
-
+    /**
+     * 注入密码编码器
+     * @return
+     */
     @Bean
     public PasswordEncoder getPasswordEncoder() {
         return new BCryptPasswordEncoder();
