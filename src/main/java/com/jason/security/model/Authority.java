@@ -24,7 +24,7 @@ public class Authority {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Integer id;
     /** 权限编码 */
     private String code;
     /** 访问路径 */

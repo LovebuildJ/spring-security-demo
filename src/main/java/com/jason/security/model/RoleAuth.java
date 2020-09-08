@@ -24,7 +24,7 @@ public class RoleAuth {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Integer id;
     /** 角色id */
     private int roleId;
     /** 权限id */

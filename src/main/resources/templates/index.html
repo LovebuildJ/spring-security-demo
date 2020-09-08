@@ -2,10 +2,66 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Login</title>
+    <title>Index</title>
     <script src="js/jquery-1.7.2.min.js"></script>
 </head>
     <body>
         <h3>我是首页</h3>
+        <br>
+        <button id="admin">管理员</button>
+        <button id="user">普通用户</button>
+
+        <br>
+        <p id="admin-content">
+
+        </p>
+        <p id="user-content">
+
+        </p>
     </body>
+<script>
+    // 登录
+    $("#admin").on("click", function(){
+        // ajax 示例
+        $.ajax({
+            //请求方式
+            type : "GET",
+            //请求地址
+            url : "/admin",
+            //请求成功
+            success : function(result) {
+                console.log(result);
+                $("#admin-content").text(result);
+            },
+            //请求失败，包含具体的错误信息
+            error : function(e){
+                if (e.status == 403) {
+                    alert("抱歉,您没有访问权限");
+                }
+            }
+        });
+    });
+
+    // 登录
+    $("#user").on("click", function(){
+        // ajax 示例
+        $.ajax({
+            //请求方式
+            type : "GET",
+            //请求地址
+            url : "/user",
+            //请求成功
+            success : function(result) {
+                $("#user-content").text(result);
+            },
+
+            //请求失败，包含具体的错误信息
+            error : function(e){
+                if (e.status == 403) {
+                    alert("抱歉,您没有访问权限");
+                }
+            }
+        });
+    });
+</script>
 </html>

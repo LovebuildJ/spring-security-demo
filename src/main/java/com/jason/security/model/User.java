@@ -7,6 +7,7 @@ import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.*;
+import java.util.Date;
 
 /**
  * @Description 用户
@@ -24,7 +25,7 @@ public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Integer id;
     /** 用户名 */
     private String username;
     /** 密码 */
@@ -36,7 +37,7 @@ public class User {
     /** 邮箱 */
     private String email;
     /** 创建时间 */
-    private String createTime;
+    private Date createTime;
     /** 更新时间 */
-    private String updateTime;
+    private Date updateTime;
 }

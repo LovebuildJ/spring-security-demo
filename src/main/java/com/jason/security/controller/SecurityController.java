@@ -28,4 +28,19 @@ public class SecurityController {
     public ModelAndView toIndex() {
         return new ModelAndView("index");
     }
+
+
+    @GetMapping("/admin")
+    @ResponseBody
+    public String admin() {
+
+        return "You are admin";
+    }
+
+    @GetMapping("/user")
+    @ResponseBody
+    public String user() {
+
+        return "You are user";
+    }
 }

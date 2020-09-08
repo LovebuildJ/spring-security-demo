@@ -1,5 +1,6 @@
 package com.jason.security.config;
 
+import com.jason.security.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -7,6 +8,7 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -25,8 +27,11 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter{
     @Autowired
     private PasswordEncoder passwordEncoder;
 
+//    @Autowired
+//    private UserDetailsService userDetailsService;
+
     @Autowired
-    private UserDetailsService userDetailsService;
+    private UserService userService;
 
     /**
      * 授权
@@ -41,6 +46,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter{
 //                .loginProcessingUrl("/login")
                 // 登录请求以及静态资源放行
                 .and().authorizeRequests().antMatchers("/loginPage","/css/**","/images/**","/js/**","/login").permitAll()
+                .and().authorizeRequests().antMatchers("/admin").hasAnyAuthority("a1")
+                .and().authorizeRequests().antMatchers("/user").hasAnyAuthority("u1")
                 .and()
                 .authorizeRequests().antMatchers("/**").authenticated()
                 .and()
@@ -53,18 +60,19 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter{
      */
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder);
+//        auth.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder); 基于内存
+        auth.userDetailsService(userService).passwordEncoder(passwordEncoder);
     }
 
     /**
      * 基于内存方式认证用户信息
      */
-    @Bean
-    public UserDetailsService getUserDetailsService() {
-        InMemoryUserDetailsManager memory = new InMemoryUserDetailsManager();
-        memory.createUser(User.withUsername("zhangsan").password(passwordEncoder.encode("123")).authorities("a1").build());
-        return memory;
-    }
+//    @Bean
+//    public UserDetailsService getUserDetailsService() {
+//        InMemoryUserDetailsManager memory = new InMemoryUserDetailsManager();
+//        memory.createUser(User.withUsername("zhangsan").password(passwordEncoder.encode("123")).authorities("a1").build());
+//        return memory;
+//    }
 
     /**
      * 注入密码编码器

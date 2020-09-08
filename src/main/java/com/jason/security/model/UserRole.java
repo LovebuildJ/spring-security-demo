@@ -24,7 +24,7 @@ public class UserRole {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Integer id;
     /** 用户id */
     private int userId;
     /** 角色id */
